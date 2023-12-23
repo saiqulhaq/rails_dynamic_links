@@ -67,6 +67,9 @@ end
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
+  gem "firebase_dynamic_link"
   gem "selenium-webdriver"
   gem "webdrivers"
 end
+
+gem 'dynamic_links', path: 'dynamic_links'
