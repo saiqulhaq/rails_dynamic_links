@@ -21,6 +21,7 @@ RUN bash -c "set -o pipefail && apt-get update \
 USER ruby
 
 COPY --chown=ruby:ruby Gemfile* ./
+COPY --chown=ruby:ruby dynamic_links ./dynamic_links
 RUN bundle install
 
 COPY --chown=ruby:ruby package.json *yarn* ./
