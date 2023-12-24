@@ -1,16 +1,16 @@
 # Rails dynamic links
 
-This Rails app is an alternative to Firebase Dynamic Links.
+This Rails app is an alternative to Firebase Dynamic Links.  
 We aim to have 100% compatibility with Firebase Dynamic Links.
 
 For the first phase, we will try to have an URL shortener feature.  
 
-For you who have many links registered on Firebase, please download your short links data 
+For you who have many links registered on Firebase, please download your short links data  
 on https://takeout.google.com/takeout/custom/firebase_dynamic_links.
 
 Then import it on `/import` page
 
-This rails app is baseed on ![Docker Rails Example](https://github.com/nickjj/docker-rails-example?ref=https://github.com/saiqulhaq/rails_dynamic_links) project.
+This rails app is based on ![Docker Rails Example](https://github.com/nickjj/docker-rails-example?ref=https://github.com/saiqulhaq/rails_dynamic_links) project.
 
 # TODO
 
@@ -23,6 +23,9 @@ Allow to convert any URL to be short URL
 - [ ] Have **import** feature to import Firebase Dynamic Links metadata that we can download from [https://takeout.google.com/takeout/custom/firebase_dynamic_links](https://takeout.google.com/takeout/custom/firebase_dynamic_links)
 - [ ] Create a controller to shorten long URL
 
+Notes:
+* [Explanation on YouTube](https://youtu.be/cL1ByYwAgQk?si=KXzUN5U5_JNXeQPs)
+* [Diagram on draw.io](https://drive.google.com/file/d/1KwLzK7rENinnj9Zo6ZK9Y3hG3yJRtr61/view?usp=sharing)
 
 ### Back-end
 
