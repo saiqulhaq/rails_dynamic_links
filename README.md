@@ -76,14 +76,6 @@ docker compose down
 You can start things up again with `docker compose up` and unlike the first
 time it should only take seconds.
 
-## Files of interest
-
-I recommend checking out most files and searching the code base for `TODO:`,
-but please review the `.env` and `run` files before diving into the rest of the
-code and customizing it. Also, you should hold off on changing anything until
-we cover how to customize this example app's name with an automated script
-(coming up next in the docs).
-
 ### `.env`
 
 This file is ignored from version control so it will never be commit. There's a
@@ -113,75 +105,29 @@ functions as you want. This file's purpose is to make your experience better!
 `alias run=./run` in your `~/.bash_aliases` or equivalent file. Then you'll be
 able to run `run` instead of `./run`.*
 
-#### Start and setup the project:
+## Start and setup the project:
 
-This won't take as long as before because Docker can re-use most things. We'll
-also need to setup our database since a new one will be created for us by
-Docker.
+### If you don't use Docker
+
+Copy `.env.example` to `.env`, then execute `source .env`.  
+Then run any rails command as usual, we can run the test `rails test` or the server `rails server`
+
+### If you use Docker
+
+Copy `.env.example` file to `.env` then run following command
 
 ```sh
 docker compose up --build
 
 # Then in a 2nd terminal once it's up and ready.
 ./run rails db:setup
+
+./run test # to run the test
+./run bundle:install # to install the dependencies
+./run bundle:update # to update the dependencies
 ```
 
 *If you get an error upping the project related to `RuntimeError: invalid
 bytecode` then you have old `tmp/` files sitting around related to the old
 project name, you can run `./run clean` to clear all temporary files and fix
 the error.*
-
-#### Sanity check to make sure the tests still pass:
-
-It's always a good idea to make sure things are in a working state before
-adding custom changes.
-
-```sh
-# You can run this from the same terminal as before.
-./run test
-```
-
-If everything passes now you can optionally `git add -A && git commit -m
-"Initial commit"` and start customizing your app. Alternatively you can wait
-until you develop more of your app before committing anything. It's up to you!
-
-## Updating dependencies
-
-Let's say you've customized your app and it's time to make a change to your
-`Gemfile` or `package.json` file.
-
-Without Docker you'd normally run `bundle install` or `yarn install`. With
-Docker it's basically the same thing and since these commands are in our
-`Dockerfile` we can get away with doing a `docker compose build` but don't run
-that just yet.
-
-#### In development:
-
-You can run `./run bundle:outdated` or `./run yarn:outdated` to get a list of
-outdated dependencies based on what you currently have installed. Once you've
-figured out what you want to update, go make those updates in your `Gemfile`
-and / or `package.json` file.
-
-Then to update your dependencies you can run `./run bundle:install` or `./run
-yarn:install`. That'll make sure any lock files get copied from Docker's image
-(thanks to volumes) into your code repo and now you can commit those files to
-version control like usual.
-
-Alternatively for updating your gems based on specific version ranges defined
-in your `Gemfile` you can run `./run bundle:update` which will install the
-latest versions of your gems and then write out a new lock file.
-
-You can check out the `run` file to see what these commands do in more detail.
-
-#### In CI:
-
-You'll want to run `docker compose build` since it will use any existing lock
-files if they exist. You can also check out the complete CI test pipeline in
-the `run` file under the `ci:test` function.
-
-#### In production:
-
-This is usually a non-issue since you'll be pulling down pre-built images from
-a Docker registry but if you decide to build your Docker images directly on
-your server you could run `docker compose build` as part of your deploy
-pipeline.
