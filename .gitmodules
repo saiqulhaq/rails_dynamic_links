@@ -1,0 +1,3 @@
+[submodule "dynamic_links"]
+	path = dynamic_links
+	url = git@github.com:saiqulhaq/dynamic_links.git
