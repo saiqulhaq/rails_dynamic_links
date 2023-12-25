@@ -1,3 +1,6 @@
+This app purpose is for internal service. it's not supposed to be accessible by end user
+Deployment target is Kubernetes.
+
 # Core features
 1. Shortening URLs
 2. Redirecting short URLs
