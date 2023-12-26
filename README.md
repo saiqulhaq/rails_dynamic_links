@@ -27,6 +27,8 @@ Notes:
 * [Explanation on YouTube](https://youtu.be/cL1ByYwAgQk?si=KXzUN5U5_JNXeQPs)
 * [Diagram on draw.io](https://drive.google.com/file/d/1KwLzK7rENinnj9Zo6ZK9Y3hG3yJRtr61/view?usp=sharing)
 
+When exporting the Firebase's shortened link, click the "Include links created from API/SDK" checkbox:
+![How to export Firebase shortened links](/app/assets/images/export.png)
 ### Back-end
 
 - [PostgreSQL](https://www.postgresql.org/)
