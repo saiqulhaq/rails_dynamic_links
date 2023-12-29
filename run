@@ -52,7 +52,7 @@ function test {
 
 function shell {
   # Start a shell session in the web container
-  cmd bash "${@}"
+  cmd zsh "${@}"
 }
 
 function psql {

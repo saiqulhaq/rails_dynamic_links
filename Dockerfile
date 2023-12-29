@@ -39,7 +39,7 @@ COPY --chown=ruby:ruby . .
 RUN if [ "${RAILS_ENV}" != "development" ]; then \
   SECRET_KEY_BASE_DUMMY=1 rails assets:precompile; fi
 
-CMD ["bash"]
+CMD ["zsh"]
 
 ###############################################################################
 
@@ -51,8 +51,10 @@ WORKDIR /app
 ARG UID=1000
 ARG GID=1000
 
+ENV LANG="C.UTF-8"
+
 RUN apt-get update \
-  && apt-get install -y --no-install-recommends build-essential curl libpq-dev git \
+  && apt-get install -y --no-install-recommends build-essential curl libpq-dev git zsh \
   && rm -rf /var/lib/apt/lists/* /usr/share/doc /usr/share/man \
   && apt-get clean \
   && groupadd -g "${GID}" ruby \
@@ -63,6 +65,11 @@ USER ruby
 
 COPY --chown=ruby:ruby bin/ ./bin
 RUN chmod 0755 bin/*
+
+ARG OMZ_VERSION=master
+RUN BRANCH=${OMZ_VERSION} \
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/${OMZ_VERSION}/tools/install.sh)" "" \
+    --unattended
 
 ARG RAILS_ENV="production"
 ENV RAILS_ENV="${RAILS_ENV}" \
