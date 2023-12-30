@@ -12,23 +12,12 @@ Then import it on `/import` page
 
 This rails app is based on ![Docker Rails Example](https://github.com/nickjj/docker-rails-example?ref=https://github.com/saiqulhaq/rails_dynamic_links) project.
 
-# TODO
-
-## First phase
-Goals:
-Allow to convert any URL to be short URL
-
-- [x] Create a library to shorten the given URL
-- [ ] Create a model to save the shorten link according to [https://firebase.google.com/support/guides/export-dynamic-links](https://firebase.google.com/support/guides/export-dynamic-links) 
-- [ ] Have **import** feature to import Firebase Dynamic Links metadata that we can download from [https://takeout.google.com/takeout/custom/firebase_dynamic_links](https://takeout.google.com/takeout/custom/firebase_dynamic_links)
-- [ ] Create a controller to shorten long URL
-
-Notes:
 * [Explanation on YouTube](https://youtu.be/cL1ByYwAgQk?si=KXzUN5U5_JNXeQPs)
 * [Diagram on draw.io](https://drive.google.com/file/d/1KwLzK7rENinnj9Zo6ZK9Y3hG3yJRtr61/view?usp=sharing)
 
-When exporting the Firebase's shortened link, click the "Include links created from API/SDK" checkbox:
-![How to export Firebase shortened links](/app/assets/images/export.png)
+# Progress
+[Open the Project page](https://github.com/users/saiqulhaq/projects/3/views/1)
+
 ### Back-end
 
 - [PostgreSQL](https://www.postgresql.org/)

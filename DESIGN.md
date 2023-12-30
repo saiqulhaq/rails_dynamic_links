@@ -4,7 +4,7 @@
 
 ### Core Features
 
-1. **Shortening URLs**: Store original link, shortened link, and `client_id`. The `client_id` is a reference to the Client table, which contains an `api_key` needed to shorten a URL using the REST API. The first Client row is a dummy record for public use.
+1. **Shortening URLs**: Store original link, shortened link.
 2. **Redirecting Short URLs**
 3. **Analytics**
 
@@ -40,7 +40,7 @@
 ### Shortening Strategy
 
 Supports two methods for URL shortening:
-1. **By Algorithm**: Default method with options like MD5, SHA-256, CRC32, Base62, nanoid, and a counter-based approach using a Redis counter or MongoDB primary key.
+1. **By Algorithm**: Default method with options like MD5, SHA-256, CRC32, nanoid, and a counter-based approach using a Redis counter or MongoDB primary key.
 2. **By KGS (Key Generation Service)**: Requires ActiveJob to seed available short links.
 3. **Manual Entry**: Users can write custom shortened URL characters (max 16 characters).
 
