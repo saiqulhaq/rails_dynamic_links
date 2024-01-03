@@ -18,6 +18,45 @@ This rails app is based on ![Docker Rails Example](https://github.com/nickjj/doc
 # Progress
 [Open the Project page](https://github.com/users/saiqulhaq/projects/3/views/1)
 
+# Usage
+
+Import the migration files from `dynamic_links` gem.
+
+```bash
+bin/rails db:create
+bin/rails dynamic_links:install:migrations
+bin/rails db:migrate
+```
+
+Each shortened url is belongs to a client. So let's create the first client for this app.
+1. Login to Rails console
+```ruby
+DynamicLinks::Client.create! name: 'Default client', api_key: 'foo', hostname: 'google.com', scheme: 'http'
+```
+2. Try to shorten a link in Postman/Insomnia app
+Request payload:
+```json
+{
+	"api_key": "foo",
+	"url": "https://github.com/rack/rack-attack"
+}
+```
+Send POST request to http://localhost:8000/v1/shortLinks
+
+The response should be similar to this json:
+```json
+{
+	"shortLink": "http://google.com/a6LlbtC",
+	"previewLink": "http://google.com/a6LlbtC?preview=true",
+	"warning": []
+}
+```
+
+# Configuration
+
+edit config/initializers/rack_attack.rb to setup the rack attack.
+You can see the configuration documentation at https://github.com/rack/rack-attack#throttling
+
 ### Back-end
 
 - [PostgreSQL](https://www.postgresql.org/)
