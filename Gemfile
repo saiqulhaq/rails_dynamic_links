@@ -73,3 +73,4 @@ group :test do
 end
 
 gem 'dynamic_links', path: 'dynamic_links'
+gem "rack-attack", "~> 6.7"
