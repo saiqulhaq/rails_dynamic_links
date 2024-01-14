@@ -77,36 +77,6 @@ services:
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
       POSTGRES_HOST_AUTH_METHOD: "trust"
 
-  worker2:
-    image: "citusdata/citus:12.1.1"
-    labels: ["com.citusdata.role=Worker"]
-    depends_on:
-      - master
-    environment:
-      POSTGRES_USER: "${POSTGRES_USER}"
-      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
-      POSTGRES_HOST_AUTH_METHOD: "trust"
-
-  worker3:
-    image: "citusdata/citus:12.1.1"
-    labels: ["com.citusdata.role=Worker"]
-    depends_on:
-      - master
-    environment:
-      POSTGRES_USER: "${POSTGRES_USER}"
-      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
-      POSTGRES_HOST_AUTH_METHOD: "trust"
-
-  worker4:
-    image: "citusdata/citus:12.1.1"
-    labels: ["com.citusdata.role=Worker"]
-    depends_on:
-      - master
-    environment:
-      POSTGRES_USER: "${POSTGRES_USER}"
-      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
-      POSTGRES_HOST_AUTH_METHOD: "trust"
-
   manager:
     container_name: "${COMPOSE_PROJECT_NAME:-citus}_manager"
     image: "citusdata/membership-manager:0.3.0"
