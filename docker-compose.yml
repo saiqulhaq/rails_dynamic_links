@@ -131,6 +131,15 @@ services:
     <<: *default-assets
     command: "yarn build:css"
 
+  docs:
+    profiles: ["web"]
+    image: jekyll/jekyll
+    volumes:
+      - .:/srv/jekyll
+      - ./vendor/bundle/:/usr/local/bundle
+    ports:
+      - "4000:4000"
+    command: jekyll serve --force_polling --drafts --config docs/_config.yml
 volumes:
   postgres: {}
   redis: {}
