@@ -8,7 +8,7 @@ x-app: &default-app
       - "RAILS_ENV=${RAILS_ENV:-production}"
       - "NODE_ENV=${NODE_ENV:-production}"
   depends_on:
-    postgres:
+    master:
       condition: "service_started"
       required: false
     redis:
@@ -41,23 +41,6 @@ x-assets: &default-assets
     - ".:/app"
 
 services:
-  postgres:
-    deploy:
-      resources:
-        limits:
-          cpus: "${DOCKER_POSTGRES_CPUS:-0}"
-          memory: "${DOCKER_POSTGRES_MEMORY:-0}"
-    environment:
-      POSTGRES_USER: "${POSTGRES_USER}"
-      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
-      # POSTGRES_DB: "${POSTGRES_DB}"
-    image: "postgres:16.1-bookworm"
-    profiles: ["postgres"]
-    restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
-    stop_grace_period: "3s"
-    volumes:
-      - "postgres:/var/lib/postgresql/data"
-
   pgadmin:
     container_name: pgadmin
     image: dpage/pgadmin4
@@ -68,6 +51,51 @@ services:
       PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False"
     ports:
       - "5050:80"
+
+  master:
+    container_name: "${COMPOSE_PROJECT_NAME:-citus}_master"
+    image: "citusdata/citus:12.1.1"
+    ports: ["${COORDINATOR_EXTERNAL_PORT:-5432}:5432"]
+    labels: ["com.citusdata.role=Master"]
+    environment: &AUTH
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+      PGUSER: "${POSTGRES_USER}"
+      PGPASSWORD: "${POSTGRES_PASSWORD}"
+      POSTGRES_HOST_AUTH_METHOD: "${POSTGRES_HOST_AUTH_METHOD:-trust}"
+  worker:
+    image: "citusdata/citus:12.1.1"
+    labels: ["com.citusdata.role=Worker"]
+    depends_on: [manager]
+    environment: *AUTH
+    command: "/wait-for-manager.sh"
+    volumes:
+      - healthcheck-volume:/healthcheck
+  manager:
+    container_name: "${COMPOSE_PROJECT_NAME:-citus}_manager"
+    image: "citusdata/membership-manager:0.3.0"
+    volumes:
+      - "${DOCKER_SOCK:-/var/run/docker.sock}:/var/run/docker.sock"
+      - healthcheck-volume:/healthcheck
+    depends_on: [master]
+    environment: *AUTH
+
+  # postgres:
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         cpus: "${DOCKER_POSTGRES_CPUS:-0}"
+  #         memory: "${DOCKER_POSTGRES_MEMORY:-0}"
+  #   environment:
+  #     POSTGRES_USER: "${POSTGRES_USER}"
+  #     POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+  #     # POSTGRES_DB: "${POSTGRES_DB}"
+  #   image: "postgres:16.1-bookworm"
+  #   profiles: ["postgres"]
+  #   restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
+  #   stop_grace_period: "3s"
+  #   volumes:
+  #     - "postgres:/var/lib/postgresql/data"
 
   redis:
     deploy:
@@ -99,7 +127,7 @@ services:
       - "${DOCKER_WEB_PORT_FORWARD:-127.0.0.1:8000}:${PORT:-8000}"
     profiles: ["web"]
 
-  worker:
+  sidekiq:
     <<: *default-app
     command: "bundle exec sidekiq -C config/sidekiq.yml"
     entrypoint: []
@@ -108,7 +136,7 @@ services:
         limits:
           cpus: "${DOCKER_WORKER_CPUS:-0}"
           memory: "${DOCKER_WORKER_MEMORY:-0}"
-    profiles: ["worker"]
+    profiles: ["sidekiq"]
 
   cable:
     <<: *default-app
@@ -134,3 +162,4 @@ services:
 volumes:
   postgres: {}
   redis: {}
+  healthcheck-volume:

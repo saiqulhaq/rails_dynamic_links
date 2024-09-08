@@ -74,3 +74,4 @@ end
 
 gem 'dynamic_links', path: 'dynamic_links'
 gem "rack-attack", "~> 6.7"
+gem 'activerecord-multi-tenant'
