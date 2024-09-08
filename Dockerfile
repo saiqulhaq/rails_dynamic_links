@@ -22,7 +22,12 @@ USER ruby
 
 COPY --chown=ruby:ruby Gemfile* ./
 COPY --chown=ruby:ruby dynamic_links ./dynamic_links
+COPY --chown=ruby:ruby docs ./docs
 RUN bundle install
+RUN cd dynamic_links && bundle install
+RUN cd
+RUN cd docs && bundle install
+RUN cd
 
 COPY --chown=ruby:ruby package.json *yarn* ./
 RUN yarn install
