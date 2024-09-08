@@ -163,7 +163,7 @@ docker compose up --build
 If you need to run with Citus:
 
 ```sh
-docker compose up -f docker-compose-citus.yml --build
+docker compose -f docker-compose-citus.yml up --build
 ```
 
 *If you get an error upping the project related to `RuntimeError: invalid
