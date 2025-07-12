@@ -1,4 +1,4 @@
-FROM ruby:3.2.2-slim-bookworm AS assets
+FROM ruby:3.3.8-slim-bookworm AS assets
 LABEL maintainer="Nick Janetakis <nick.janetakis@gmail.com>"
 
 WORKDIR /app
@@ -7,7 +7,7 @@ ARG UID=1000
 ARG GID=1000
 
 RUN bash -c "set -o pipefail && apt-get update \
-  && apt-get install -y --no-install-recommends build-essential curl git libpq-dev \
+  && apt-get install -y --no-install-recommends build-essential curl git libpq-dev libyaml-dev \
   && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key -o /etc/apt/keyrings/nodesource.asc \
   && echo 'deb [signed-by=/etc/apt/keyrings/nodesource.asc] https://deb.nodesource.com/node_20.x nodistro main' | tee /etc/apt/sources.list.d/nodesource.list \
   && apt-get update && apt-get install -y --no-install-recommends nodejs \
@@ -21,7 +21,7 @@ RUN bash -c "set -o pipefail && apt-get update \
 USER ruby
 
 COPY --chown=ruby:ruby Gemfile* ./
-COPY --chown=ruby:ruby dynamic_links ./dynamic_links
+# COPY --chown=ruby:ruby dynamic_links ./dynamic_links
 RUN bundle install
 
 COPY --chown=ruby:ruby package.json *yarn* ./
@@ -43,7 +43,7 @@ CMD ["zsh"]
 
 ###############################################################################
 
-FROM ruby:3.2.2-slim-bookworm AS app
+FROM ruby:3.3.8-slim-bookworm AS app
 LABEL maintainer="Nick Janetakis <nick.janetakis@gmail.com>"
 
 WORKDIR /app
