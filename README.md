@@ -20,8 +20,8 @@ This Rails app is based on the ![Docker Rails Example](https://github.com/nickjj
 * [Explanation on YouTube](https://youtu.be/cL1ByYwAgQk?si=KXzUN5U5_JNXeQPs)
 * [Diagram on draw.io](https://drive.google.com/file/d/1KwLzK7rENinnj9Zo6ZK9Y3hG3yJRtr61/view?usp=sharing)
 
-# Progress
-[Open the Project page](https://github.com/users/saiqulhaq/projects/3/views/1)
+# Project Status
+Check out our [TODO list](TODO.md) to see what's been completed and what's still in development.
 
 
 # Usage
