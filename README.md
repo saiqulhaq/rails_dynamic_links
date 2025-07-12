@@ -1,16 +1,21 @@
 # Rails dynamic links
 
-This Rails app is an alternative to Firebase Dynamic Links.  
-We aim to have 100% compatibility with Firebase Dynamic Links.
+This Rails app is an alternative to Firebase Dynamic Links, aiming for 100% compatibility. It provides a self-hosted URL shortener and dynamic link service.
 
-For the first phase, we will try to have an URL shortener feature.  
+**Core functionality is provided by the [`dynamic_links`](../dynamic_links) gem, a Rails engine included in this app.**
 
-For you who have many links registered on Firebase, please download your short links data  
-on https://takeout.google.com/takeout/custom/firebase_dynamic_links.
+### Features (via `dynamic_links` gem)
 
-Then import it on `/import` page
+- Multiple URL shortening strategies: MD5 (default), NanoId, RedisCounter, Sha256, and more
+- Consistent or unique short links depending on strategy
+- Fallback mode: Optionally redirect to Firebase Dynamic Links if a short link is not found
+- REST API for programmatic access (can be enabled/disabled)
+- Redis support for advanced strategies
+- Import/export for Firebase Dynamic Links data
 
-This rails app is based on ![Docker Rails Example](https://github.com/nickjj/docker-rails-example?ref=https://github.com/saiqulhaq/rails_dynamic_links) project.
+For users migrating from Firebase, download your short links data from https://takeout.google.com/takeout/custom/firebase_dynamic_links and import it on the `/import` page.
+
+This Rails app is based on the ![Docker Rails Example](https://github.com/nickjj/docker-rails-example?ref=https://github.com/saiqulhaq/rails_dynamic_links) project.
 
 * [Explanation on YouTube](https://youtu.be/cL1ByYwAgQk?si=KXzUN5U5_JNXeQPs)
 * [Diagram on draw.io](https://drive.google.com/file/d/1KwLzK7rENinnj9Zo6ZK9Y3hG3yJRtr61/view?usp=sharing)
@@ -18,9 +23,10 @@ This rails app is based on ![Docker Rails Example](https://github.com/nickjj/doc
 # Progress
 [Open the Project page](https://github.com/users/saiqulhaq/projects/3/views/1)
 
+
 # Usage
 
-Import the migration files from `dynamic_links` gem.
+Import the migration files from the `dynamic_links` gem:
 
 ```bash
 bin/rails db:create
@@ -28,39 +34,77 @@ bin/rails dynamic_links:install:migrations
 bin/rails db:migrate
 ```
 
-Each shortened url is belongs to a client. So let's create the first client for this app.
-1. Login to Rails console
-```ruby
-DynamicLinks::Client.create! name: 'Default client', api_key: 'foo', hostname: 'google.com', scheme: 'http'
-```
-2. Try to shorten a link in Postman/Insomnia app
-Request payload:
-```json
-{
-	"api_key": "foo",
-	"url": "https://github.com/rack/rack-attack"
-}
-```
-Send POST request to http://localhost:8000/v1/shortLinks
+Each shortened URL belongs to a client. Create your first client in the Rails console:
 
-The response should be similar to this json:
+```ruby
+DynamicLinks::Client.create!(name: 'Default client', api_key: 'foo', hostname: 'google.com', scheme: 'http')
+```
+
+To shorten a link via the REST API, send a POST request to `http://localhost:8000/v1/shortLinks` with this payload:
+
 ```json
 {
-	"shortLink": "http://google.com/a6LlbtC",
-	"previewLink": "http://google.com/a6LlbtC?preview=true",
-	"warning": []
+  "api_key": "foo",
+  "url": "https://github.com/rack/rack-attack"
 }
 ```
+
+The response will look like:
+
+```json
+{
+  "shortLink": "http://google.com/a6LlbtC",
+  "previewLink": "http://google.com/a6LlbtC?preview=true",
+  "warning": []
+}
+```
+
 
 # Configuration
 
-edit config/initializers/rack_attack.rb to setup the rack attack.
-You can see the configuration documentation at https://github.com/rack/rack-attack#throttling
+## DynamicLinks Engine Configuration
+
+
+You can configure the `dynamic_links` engine in an initializer (e.g., `config/initializers/dynamic_links.rb`). Example:
+
+```ruby
+DynamicLinks.configure do |config|
+  config.shortening_strategy = :md5  # :md5, :nanoid, :redis_counter, :sha256, etc.
+  config.redis_config = { host: 'localhost', port: 6379 }
+  config.redis_pool_size = 10
+  config.redis_pool_timeout = 3
+  config.enable_rest_api = true
+  config.enable_fallback_mode = false  # If true, fallback to Firebase if not found
+  config.firebase_host = "https://example.app.goo.gl"  # Used for fallback
+end
+```
+
+### What is Fallback Mode?
+
+**Fallback Mode** allows your Rails app to redirect users to the original Firebase Dynamic Links service if a requested short link is not found in your local database. This is useful when you are migrating from Firebase and want to ensure that any links not yet imported or created in your self-hosted service will still work for end users.
+
+- When `enable_fallback_mode` is set to `true`, and a short link is not found locally, the app will automatically redirect to the URL specified by `firebase_host` (with the same path and query parameters).
+- When set to `false`, missing links will return a standard 404 error.
+
+This feature helps provide a seamless migration experience from Firebase Dynamic Links to your own self-hosted solution.
+
+
+See the [dynamic_links README](../dynamic_links/README.md) for all available options and strategies.
+
+### Optional dependencies
+
+- For `:nanoid` strategy: add `gem 'nanoid', '~> 2.0'`
+- For `:redis_counter` strategy: ensure Redis is running and add `gem 'connection_pool'`
+
+---
+
+To configure rate limiting, edit `config/initializers/rack_attack.rb`. See https://github.com/rack/rack-attack#throttling
+
 
 ### Back-end
 
 - [PostgreSQL](https://www.postgresql.org/)
-- [Redis](https://redis.io/)
+- [Redis](https://redis.io/) (optional, required for some strategies)
 - [Sidekiq](https://github.com/mperham/sidekiq)
 - [Action Cable](https://guides.rubyonrails.org/action_cable_overview.html)
 - [ERB](https://guides.rubyonrails.org/layouts_and_rendering.html)

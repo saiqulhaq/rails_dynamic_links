@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.2.2"
+ruby "3.3.8"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.1.2"
@@ -69,9 +69,11 @@ group :test do
   gem "capybara"
   gem "firebase_dynamic_link"
   gem "selenium-webdriver"
+  gem "simplecov"
   gem "webdrivers"
 end
 
-gem 'dynamic_links', path: 'dynamic_links'
+gem 'dynamic_links'
 gem "rack-attack", "~> 6.7"
 gem 'activerecord-multi-tenant'
+gem 'nanoid'
