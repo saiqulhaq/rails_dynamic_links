@@ -69,6 +69,7 @@ group :test do
   gem "capybara"
   gem "firebase_dynamic_link"
   gem "selenium-webdriver"
+  gem "simplecov"
   gem "webdrivers"
 end
 
