@@ -12,6 +12,7 @@ This Rails app is an alternative to Firebase Dynamic Links, aiming for 100% comp
 - REST API for programmatic access (can be enabled/disabled)
 - Redis support for advanced strategies
 - Import/export for Firebase Dynamic Links data
+- Optional performance monitoring with ElasticAPM (disabled by default)
 
 For users migrating from Firebase, download your short links data from https://takeout.google.com/takeout/custom/firebase_dynamic_links and import it on the `/import` page.
 
@@ -21,8 +22,12 @@ This Rails app is based on the ![Docker Rails Example](https://github.com/nickjj
 * [Diagram on draw.io](https://drive.google.com/file/d/1KwLzK7rENinnj9Zo6ZK9Y3hG3yJRtr61/view?usp=sharing)
 
 # Project Status
-Check out our [TODO list](TODO.md) to see what's been completed and what's still in development.
+Check out our [Project Board](https://github.com/users/saiqulhaq/projects/3/views/1) to see what's been completed and what's still in development.
 
+# Documentation
+
+- [ElasticAPM Integration](docs/elastic_apm.md) - Performance monitoring setup and usage
+- [Docker ElasticAPM Setup](docs/docker_elastic_apm.md) - How to use ElasticAPM with Docker Compose
 
 # Usage
 
@@ -214,3 +219,9 @@ docker compose -f docker-compose-citus.yml up --build
 bytecode` then you have old `tmp/` files sitting around related to the old
 project name, you can run `./run clean` to clear all temporary files and fix
 the error.*
+
+If you need to run ElasticAPM with Docker Compose, you can use the `elastic-apm` profile:
+
+```sh
+docker compose --profile elastic-apm up -d
+```
