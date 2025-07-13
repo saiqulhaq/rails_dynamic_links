@@ -22,7 +22,7 @@ This Rails app is based on the ![Docker Rails Example](https://github.com/nickjj
 * [Diagram on draw.io](https://drive.google.com/file/d/1KwLzK7rENinnj9Zo6ZK9Y3hG3yJRtr61/view?usp=sharing)
 
 # Project Status
-Check out our [TODO list](TODO.md) to see what's been completed and what's still in development.
+Check out our [Project Board](https://github.com/users/saiqulhaq/projects/3/views/1) to see what's been completed and what's still in development.
 
 # Documentation
 
@@ -219,3 +219,9 @@ docker compose -f docker-compose-citus.yml up --build
 bytecode` then you have old `tmp/` files sitting around related to the old
 project name, you can run `./run clean` to clear all temporary files and fix
 the error.*
+
+If you need to run ElasticAPM with Docker Compose, you can use the `elastic-apm` profile:
+
+```sh
+docker compose --profile elastic-apm up -d
+```
