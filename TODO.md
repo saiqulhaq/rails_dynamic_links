@@ -31,6 +31,11 @@ Features
 [ ]Custom aliases validation.
 [ ]Analytics: basic charts with chartkick gem.
 
+Performance & Monitoring
+[X]Integrate ElasticAPM for performance monitoring with toggle support.
+[ ]Optimize database queries for high-traffic scenarios.
+[ ]Add indexes for frequently accessed fields.
+
 Security & Extras
 [ ]HTTPS enforcement.
 [ ]Token-based API auth.

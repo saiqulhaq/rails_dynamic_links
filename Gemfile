@@ -45,6 +45,10 @@ gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
 # Execute jobs in the background [https://github.com/mperham/sidekiq]
 gem "sidekiq", "~> 7.2"
 
+# Application Performance Monitoring (conditionally loaded based on configuration)
+require_elastic_apm = ENV.fetch('ELASTIC_APM_ENABLED', 'false').downcase == 'true'
+gem 'elastic-apm', require: require_elastic_apm
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri mingw x64_mingw ]

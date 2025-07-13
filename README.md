@@ -12,6 +12,7 @@ This Rails app is an alternative to Firebase Dynamic Links, aiming for 100% comp
 - REST API for programmatic access (can be enabled/disabled)
 - Redis support for advanced strategies
 - Import/export for Firebase Dynamic Links data
+- Optional performance monitoring with ElasticAPM (disabled by default)
 
 For users migrating from Firebase, download your short links data from https://takeout.google.com/takeout/custom/firebase_dynamic_links and import it on the `/import` page.
 
@@ -23,6 +24,10 @@ This Rails app is based on the ![Docker Rails Example](https://github.com/nickjj
 # Project Status
 Check out our [TODO list](TODO.md) to see what's been completed and what's still in development.
 
+# Documentation
+
+- [ElasticAPM Integration](docs/elastic_apm.md) - Performance monitoring setup and usage
+- [Docker ElasticAPM Setup](docs/docker_elastic_apm.md) - How to use ElasticAPM with Docker Compose
 
 # Usage
 
