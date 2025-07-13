@@ -14,6 +14,7 @@
 2. **QR Code Generation** (`dynamic_links_qrcode`): Generate QR codes for shortened URLs.
 3. **Custom Domains** (`dynamic_links_domains`): Support for multiple custom domains.
 4. **Advanced Statistics** (`dynamic_links_statistics`): Detailed reporting and dashboards.
+5. **Dashboard** (`dynamic_links_dashboard`): Administrative interface for managing and visualizing data.
 
 ### Performance Needs
 
@@ -39,6 +40,75 @@
   - The core gem provides extension points via Rails Instrumentation events
   - Additional functionality should be implemented as separate gems (e.g., `dynamic_links_analytics`)
   - This approach allows for modularity, flexibility, and cleaner maintenance
+
+### Architecture Diagram
+
+```mermaid
+graph TD
+    subgraph "Core Gem: dynamic_links"
+        A[URL Shortening Service] 
+        B[Redirection Service]
+        C[Event Broadcasting System]
+        D[(Database Layer)]
+        
+        A --> D
+        B --> D
+        A --> C
+        B --> C
+    end
+    
+    subgraph "Extension Gems"
+        E[dynamic_links_analytics]
+        F[dynamic_links_qrcode]
+        G[dynamic_links_domains]
+        H[dynamic_links_dashboard]
+        
+        C -->|dynamic_links.create| E
+        C -->|dynamic_links.redirect| E
+        C -->|dynamic_links.expire| E
+        
+        C -->|dynamic_links.create| F
+        
+        C -->|dynamic_links.create| G
+        C -->|dynamic_links.redirect| G
+        
+        C -->|All events| H
+        E -->|Analytics data| H
+    end
+    
+    subgraph "Client Applications"
+        I[API Clients]
+        J[End Users]
+        
+        I --> A
+        J --> B
+        J --> H
+    end
+    
+    subgraph "Infrastructure"
+        K[Web Server]
+        L[DB Server]
+        M[Redis]
+        
+        K --> A
+        K --> B
+        K --> E
+        K --> F
+        K --> G
+        K --> H
+        
+        L --> D
+        M --> D
+        M --> E
+    end
+    
+    style H fill:#f9f,stroke:#333,stroke-width:2px
+    style E fill:#bbf,stroke:#333,stroke-width:1px
+    style F fill:#ddf,stroke:#333,stroke-width:1px
+    style G fill:#ddf,stroke:#333,stroke-width:1px
+```
+
+The highlighted `dynamic_links_dashboard` extension would provide an administrative interface to manage and visualize the data collected by the core system and other extensions.
 
 ### Database Design
 
@@ -116,3 +186,34 @@ _Notes_:
     )
   end
   ```
+
+### Future Extensions
+
+#### Dynamic Links Dashboard (`dynamic_links_dashboard`)
+
+The dashboard extension will provide a web-based administrative interface with the following capabilities:
+
+- **Data Management**:
+  - View and search all shortened URLs
+  - Create, edit, and delete links manually
+  - Bulk operations (import/export, enable/disable)
+  - Filter links by status, creation date, expiration, etc.
+
+- **Analytics Visualization**:
+  - Traffic overview with charts and graphs
+  - Click-through rates and geographic distribution
+  - Referrer analysis
+  - User agent and device statistics
+
+- **System Management**:
+  - Configuration of the core system
+  - Extension management
+  - API key administration
+
+- **Implementation Details**:
+  - Uses its own UI components (likely Hotwire/Stimulus or React)
+  - Interfaces with core system via instrumentation events
+  - Consumes data from other extensions like `dynamic_links_analytics`
+  - Can be mounted as a Rails engine in the main application
+
+The dashboard will be implemented as a separate gem to maintain the plugin-based architecture, ensuring the core system remains lightweight and focused on its primary functionality.
