@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.3.8"
+ruby "3.4.1"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.1.2"
@@ -48,6 +48,11 @@ gem "sidekiq", "~> 7.2"
 # Application Performance Monitoring (conditionally loaded based on configuration)
 require_elastic_apm = ENV.fetch('ELASTIC_APM_ENABLED', 'false').downcase == 'true'
 gem 'elastic-apm', require: require_elastic_apm
+
+group :development do
+  # Detect N+1 queries and unused eager loading
+  gem 'bullet'
+end
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
