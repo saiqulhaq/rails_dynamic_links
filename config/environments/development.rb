@@ -48,6 +48,7 @@ Rails.application.configure do
   config.active_support.disallowed_deprecation = :raise
 
   # Tell Active Support which deprecation messages to disallow.
+  config.active_support.disallowed_deprecation_warnings = []
 
   # Bullet configuration for detecting N+1 queries
   config.after_initialize do
@@ -59,7 +60,6 @@ Rails.application.configure do
     # Since we use elastic-apm, let's also log to it
     Bullet.raise = Rails.env.development? # Raise errors in development to be caught by elastic-apm
   end
-  config.active_support.disallowed_deprecation_warnings = []
 
   # Raise an error on page load if there are pending migrations.
   config.active_record.migration_error = :page_load
